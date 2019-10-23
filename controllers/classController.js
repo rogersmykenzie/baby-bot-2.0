@@ -29,25 +29,30 @@ class Baby {
   constructor(client) {
     this.client = client;
     this.timerName = '';
+    this.isCrying = false;
   }
 
   cry() {
-    this.client.channels.get(process.env.GENERAL_CHANNEL_ID).send('WAH!');
+    this.client.channels.get(process.env.THE_CRADLE_ID).send('WAH!');
   }
 
   startCrying() {
-    this.timerName = setInterval(() => {
-      this.cry();
-      console.log(this.timerName);
-    }, 1000);
+    if (this.isCrying === false) {
+      this.isCrying = true;
+      this.timerName = setInterval(() => {
+        this.cry();
+        console.log(this.timerName);
+      }, 3000);
+    }
   }
 
   stopCrying() {
-    const name = this.timerName;
-    clearInterval(name);
-    this.client.channels
-      .get(process.env.GENERAL_CHANNEL_ID)
-      .send('*suck suck*');
+    if (this.isCrying === true) {
+      this.isCrying = false;
+      const name = this.timerName;
+      clearInterval(name);
+      this.client.channels.get(process.env.THE_CRADLE_ID).send('*suck suck*');
+    }
   }
 }
 
