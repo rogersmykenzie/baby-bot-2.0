@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 class Command {
   static splitMessage(message) {
     const commands = message.trim().split('!baby');
