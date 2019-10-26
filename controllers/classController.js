@@ -1,4 +1,3 @@
-require('dotenv').config();
 class Command {
   static splitMessage(message) {
     const commands = message.trim().split('!baby');
@@ -20,7 +19,7 @@ class Command {
   }
 
   get arguments() {
-    return this.segmentedCommand.slice(1);
+    return this.segmentedCommand.slice(1).map(val => val.toLowerCase());
   }
 }
 
@@ -40,7 +39,6 @@ class Baby {
       this.isCrying = true;
       this.timerName = setInterval(() => {
         this.cry();
-        console.log(this.timerName);
       }, 3000);
     }
   }
@@ -52,6 +50,20 @@ class Baby {
       clearInterval(name);
       this.client.channels.get(process.env.THE_CRADLE_ID).send('*suck suck*');
     }
+  }
+
+  say(message, channelID = process.env.THE_CRADLE_ID) {
+    try {
+      this.client.channels.get(channelID).send(message);
+    } catch (e) {
+      return {
+        error: e.message
+      };
+    }
+  }
+
+  tell(user, message) {
+    user.send(message);
   }
 }
 
